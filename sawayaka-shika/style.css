@@ -1,0 +1,1941 @@
+/*
+Theme Name: Sawayaka Shika Clinic
+Theme URI: https://veracraft.jp
+Author: MAKOTO WORKS (Veracraft)
+Description: さわやか歯科クリニック様専用のWordPressテーマ。静的プロトタイプ（完成した制作物/01_ホームページ・LP/さわやか歯科クリニック ホームページ/）をWP化したもの。コーディング規約はSANBOU PARTNERS（veracraft/projects/sanbou-partners-lp）と揃えている。
+Version: 1.0.0
+Requires PHP: 7.4
+Text Domain: sawayaka-shika
+*/
+
+/* さわやか歯科クリニック ホームページ スタイルシート
+   SANBOU PARTNERS株式会社のプロトタイプ（veracraft/projects/contact-form-20260804/
+   prototype/assets/css/top.css・contact.css）と同じ書き方に合わせている。
+   参考にした書き方：
+   - .wrap（コンテナ）、.section-title/.section-heading/.section-lead（見出し3点セット）、
+     .btn（ボタン）等の使い回しクラス
+   - セクションに id を持たせてアンカーにする（#top, #medical, #concept, #staff, #news, #access）
+   - BEMのようなmodifierクラス（--pink等）や__要素クラスは使わず、.medical-card:nth-child(2)
+     のような子孫・構造セレクタで書く
+   - ハンバーガーメニューは #hamburger + #header-Navi、開閉は .open クラスで表す
+   - 現在地のナビリンクは .is-current クラスではなく aria-current="page" 属性で表す
+   デザインの見た目・レスポンシブの挙動（ブレークポイント767px/1100px）は変更しない。
+   書き方だけをSANBOU側に合わせている。 */
+
+:root {
+  --color-canvas: #fffdf9;
+  --color-surface: #ffffff;
+  --color-text: #243b4a;
+  --color-text-light: #607481;
+  --color-blue: #179bd7;
+  --color-blue-deep: #075795;
+  --color-blue-soft: #e9f8ff;
+  --color-coral: #f46f67;
+  --color-coral-deep: #e85b55;
+  --color-pink-soft: #fce8e4;
+  --color-green: #76ad4c;
+  --color-green-soft: #edf6e8;
+  --color-yellow-soft: #fff5d7;
+  --color-border: #d7ebf4;
+  --font-heading: "Kiwi Maru", "Yu Mincho", serif;
+  --font-jp: "Noto Sans JP", "Yu Gothic", sans-serif;
+  --shadow-soft: 0 14px 40px rgba(36, 102, 137, 0.12);
+  --radius: 12px;
+}
+
+/* ==================== ベース ==================== */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  color: var(--color-text);
+  background: var(--color-canvas);
+  font-family: var(--font-jp);
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+.wrap {
+  width: min(1180px, calc(100% - 48px));
+  margin: 0 auto;
+}
+
+/* ナビメニュー（#header-Navi / #footer-Navi）共通のリセット */
+.menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* ==================== ボタン共通 ==================== */
+/* さわやか歯科クリニックのボタンはヘッダーCTA・ヒーローCTA・フッター等で
+   見た目がそれぞれ異なるため、SANBOU側の.btnのような単一の共通見た目は
+   持たせず、クラス名だけ.btnとして共通化し、置かれる場所ごとに文脈セレクタ
+   （#header .btn など）で個別に定義する。 */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.btn:focus-visible {
+  outline: 3px solid #ffd95c;
+  outline-offset: 4px;
+}
+
+/* ==================== Header ==================== */
+#header {
+  position: relative;
+  z-index: 20;
+  height: 96px;
+  background: rgba(255, 255, 255, 0.98);
+  border-bottom: 1px solid rgba(23, 155, 215, 0.13);
+}
+
+#header .wrap {
+  width: min(1360px, calc(100% - 48px));
+  height: 100%;
+  display: grid;
+  grid-template-columns: 300px 1fr 245px;
+  align-items: center;
+  gap: 32px;
+}
+
+.site-Title-Logo {
+  width: 276px;
+  height: 66px;
+  object-fit: contain;
+  object-position: left center;
+}
+
+#header-Navi .menu {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: clamp(20px, 2.25vw, 38px);
+  white-space: nowrap;
+}
+
+#header-Navi a {
+  position: relative;
+  display: block;
+  padding: 36px 0 34px;
+  color: #304b5c;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+#header-Navi a::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 25px;
+  left: 0;
+  height: 2px;
+  background: var(--color-blue);
+  transform: scaleX(0);
+  transition: transform 180ms ease;
+}
+
+#header-Navi a:hover::after,
+#header-Navi a:focus-visible::after,
+#header-Navi a[aria-current="page"]::after {
+  transform: scaleX(1);
+}
+
+#header .btn {
+  align-self: stretch;
+  margin-right: -24px;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: #fff;
+  background: linear-gradient(135deg, #fb8177, var(--color-coral));
+  border-radius: 0 0 0 var(--radius);
+  box-shadow: -7px 8px 24px rgba(244, 111, 103, 0.18);
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.35;
+  transition: filter 180ms ease;
+}
+
+#header .btn:hover {
+  filter: brightness(0.96);
+}
+
+#header .btn small {
+  display: block;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+}
+
+.cta-icon {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  border-radius: 50%;
+  font-size: 17px;
+}
+
+/* ハンバーガーボタン（スマホ表示のみ #hamburger { display: flex } で表示される） */
+#hamburger {
+  display: none;
+}
+
+/* ==================== Hero ==================== */
+.hero {
+  position: relative;
+  min-height: 670px;
+  overflow: hidden;
+  isolation: isolate;
+  background: #f5fbfe;
+}
+
+.hero-photo {
+  position: absolute;
+  z-index: -4;
+  inset: 0 0 0 36%;
+  background: url("assets/images/img3.jpg") center / cover no-repeat;
+}
+
+.hero-photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.92) 0%, rgba(255, 255, 255, 0.18) 40%, rgba(255, 255, 255, 0.02) 100%);
+}
+
+.hero-wash {
+  position: absolute;
+  z-index: -3;
+  inset: 0;
+  background:
+    radial-gradient(circle at 21% 42%, rgba(255, 255, 255, 0.98) 0 22%, rgba(255, 255, 255, 0.82) 41%, transparent 60%),
+    linear-gradient(90deg, #fffdf9 0 35%, rgba(255, 253, 249, 0.22) 70%);
+}
+
+.paper-texture {
+  position: absolute;
+  z-index: -2;
+  inset: 0;
+  opacity: 0.35;
+  background-image:
+    radial-gradient(#abdff4 0.65px, transparent 0.65px),
+    radial-gradient(#f6ce7b 0.55px, transparent 0.55px);
+  background-position: 0 0, 8px 8px;
+  background-size: 16px 16px;
+  mask-image: linear-gradient(90deg, #000 0 42%, transparent 66%);
+}
+
+.hero-inner {
+  width: min(1220px, calc(100% - 64px));
+  min-height: 620px;
+  margin: 0 auto;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.hero-copy {
+  width: 610px;
+  padding: 30px 0 80px;
+}
+
+.hero-kicker {
+  margin: 0 0 10px;
+  color: var(--color-blue-deep);
+  font-family: var(--font-heading);
+  font-size: clamp(24px, 2vw, 31px);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+}
+
+.hero-title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: 0.04em;
+}
+
+.hero-title span {
+  display: block;
+  color: #0b588e;
+  font-size: clamp(54px, 5.1vw, 76px);
+}
+
+.hero-title strong {
+  display: block;
+  margin-top: 2px;
+  color: var(--color-coral);
+  font-size: clamp(70px, 6.7vw, 98px);
+  font-weight: 500;
+  text-shadow: 2px 3px 0 rgba(255, 255, 255, 0.9);
+}
+
+.hero-description {
+  margin: 24px 0 28px;
+  color: #364e5d;
+  font-size: 16px;
+  line-height: 1.95;
+  letter-spacing: 0.04em;
+}
+
+.hero .btn {
+  width: 370px;
+  min-height: 68px;
+  padding: 10px 22px;
+  display: grid;
+  grid-template-columns: 38px 1fr 24px;
+  align-items: center;
+  gap: 12px;
+  color: #fff;
+  background: linear-gradient(135deg, #fa8177, var(--color-coral-deep));
+  border: 2px solid rgba(255, 255, 255, 0.75);
+  border-radius: var(--radius);
+  box-shadow: 0 11px 24px rgba(226, 91, 84, 0.25);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.hero .btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 30px rgba(226, 91, 84, 0.3);
+}
+
+.hero .btn .btn-icon {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  font-size: 20px;
+}
+
+.hero .btn .btn-arrow {
+  font-size: 21px;
+}
+
+.hero-badge {
+  position: absolute;
+  right: 2.5%;
+  bottom: 80px;
+  width: 172px;
+  height: 172px;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 4px;
+  color: var(--color-blue-deep);
+  background: rgba(255, 255, 255, 0.93);
+  border: 2px solid var(--color-blue);
+  border-radius: 50%;
+  box-shadow: var(--shadow-soft);
+  text-align: center;
+  font-family: var(--font-heading);
+  font-size: 13px;
+  line-height: 1.55;
+  transform: rotate(-4deg);
+}
+
+.hero-badge img {
+  width: 66px;
+  transform: rotate(4deg);
+}
+
+.decor {
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.decor-leaf {
+  right: -4px;
+  top: 45px;
+  width: 124px;
+  transform: rotate(8deg);
+}
+
+.decor-sparkle {
+  left: 34px;
+  top: 108px;
+  width: 76px;
+}
+
+.decor-brush {
+  left: 46%;
+  bottom: 96px;
+  width: 92px;
+  transform: rotate(-18deg);
+}
+
+.hero-wave {
+  position: absolute;
+  right: 0;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 100px;
+}
+
+/* ==================== 見出し3点セット（.section-title/.section-heading/.section-lead） ====================
+   セクションの英字ラベル・和文見出し・リード文の組み合わせを全セクション共通で使う。
+   デフォルトは中央寄せ（Concept/Environment/Messageの2カラムセクションだけ左寄せに上書きする）。 */
+.section-title {
+  margin: 0 0 8px;
+  color: var(--color-coral);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-align: center;
+}
+
+.section-heading {
+  margin: 0 0 30px;
+  color: var(--color-blue-deep);
+  font-family: var(--font-heading);
+  font-size: clamp(38px, 3.3vw, 50px);
+  font-weight: 500;
+  line-height: 1.42;
+  letter-spacing: 0.04em;
+  text-align: center;
+}
+
+.section-lead {
+  max-width: 590px;
+  margin: 0 auto 54px;
+  color: var(--color-text-light);
+  font-size: 15px;
+  line-height: 2.15;
+  text-align: center;
+}
+
+.concept-layout .section-title,
+.environment-layout .section-title,
+.message-layout .section-title,
+.concept-layout .section-heading,
+.environment-layout .section-heading,
+.message-layout .section-heading,
+.concept-layout .section-lead,
+.environment-layout .section-lead,
+.message-layout .section-lead {
+  margin-left: 0;
+  text-align: left;
+}
+
+.concept-layout .section-lead,
+.environment-layout .section-lead,
+.message-layout .section-lead {
+  margin-bottom: 0;
+  max-width: none;
+}
+
+.concept-layout .section-lead + .section-lead,
+.environment-layout .section-lead + .section-lead,
+.message-layout .section-lead + .section-lead {
+  margin-top: 20px;
+}
+
+.btn.text-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 24px;
+  padding: 11px 0 7px;
+  color: var(--color-blue-deep);
+  font-size: 14px;
+  font-weight: 700;
+  border-bottom: 1px solid var(--color-blue);
+}
+
+/* ==================== トップ最上部「大切にしていること」（3つのミニカード） ==================== */
+.trust {
+  position: relative;
+  min-height: 430px;
+  padding: 20px 24px 0;
+  text-align: center;
+  background: var(--color-canvas);
+  overflow: hidden;
+}
+
+.section-ornament {
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.section-ornament span {
+  width: 5px;
+  height: 5px;
+  background: var(--color-blue);
+  border-radius: 50%;
+}
+
+.section-ornament span:nth-child(2) {
+  width: 44px;
+  height: 1px;
+  border-radius: 0;
+}
+
+.trust-list {
+  width: min(980px, 100%);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+
+.trust-card {
+  position: relative;
+  min-height: 200px;
+  padding: 24px;
+  display: grid;
+  grid-template-columns: 95px 1fr;
+  align-items: center;
+  text-align: left;
+  border-radius: var(--radius);
+  box-shadow: 0 8px 24px rgba(36, 102, 137, 0.06);
+}
+
+.trust-card:nth-child(1) {
+  background: var(--color-pink-soft);
+}
+
+.trust-card:nth-child(2) {
+  background: var(--color-blue-soft);
+}
+
+.trust-card:nth-child(3) {
+  background: var(--color-green-soft);
+}
+
+.trust-card img {
+  width: 86px;
+  max-height: 95px;
+  object-fit: contain;
+}
+
+.trust-card h3 {
+  margin: 0;
+  color: var(--color-blue-deep);
+  font-family: var(--font-heading);
+  font-size: 19px;
+  font-weight: 500;
+  line-height: 1.65;
+}
+
+.trust-card:nth-child(1) h3 {
+  color: #ca5956;
+}
+
+.trust-card:nth-child(3) h3 {
+  color: #55893c;
+}
+
+.trust-number {
+  position: absolute;
+  top: 14px;
+  right: 28px;
+  color: rgba(7, 87, 149, 0.25);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+/* ==================== Concept（当院について） ==================== */
+.concept {
+  padding-block: clamp(96px, 8.5vw, 136px);
+  background: linear-gradient(135deg, #fffdf9, #f3fbff);
+}
+
+.concept-layout,
+.environment-layout,
+.message-layout {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: clamp(70px, 8vw, 116px);
+  align-items: center;
+}
+
+.organic-photo,
+.doctor-photo {
+  position: relative;
+  width: 100%;
+  padding: 14px;
+}
+
+.organic-photo::before {
+  content: "";
+  position: absolute;
+  inset: -13px 22px 20px -13px;
+  background: var(--color-blue-soft);
+  border-radius: var(--radius);
+  transform: rotate(-2deg);
+}
+
+.organic-photo::after,
+.doctor-photo::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  width: 112px;
+  height: 112px;
+  border: 2px dotted var(--color-blue);
+  border-radius: 50%;
+  opacity: 0.35;
+}
+
+.organic-photo::after {
+  right: -30px;
+  bottom: -27px;
+}
+
+.doctor-photo::after {
+  left: -30px;
+  top: -26px;
+}
+
+.doctor-photo::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--color-pink-soft);
+  border-radius: var(--radius);
+}
+
+.organic-photo img {
+  position: relative;
+  width: 100%;
+  height: 430px;
+  object-fit: cover;
+  border-radius: var(--radius);
+}
+
+/* ==================== Medical（診療案内） ==================== */
+.medical {
+  padding-block: clamp(96px, 8.5vw, 136px);
+  background: #fff;
+}
+
+.medical-list {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.medical-card {
+  position: relative;
+  min-height: 405px;
+  padding: 32px 26px;
+  border: 1px solid rgba(7, 87, 149, 0.1);
+  border-radius: var(--radius);
+  box-shadow: 0 12px 30px rgba(36, 102, 137, 0.07);
+  overflow: hidden;
+}
+
+.medical-card::after {
+  content: "";
+  position: absolute;
+  right: -24px;
+  bottom: -24px;
+  width: 90px;
+  height: 90px;
+  border: 1px dashed currentColor;
+  border-radius: 50%;
+  opacity: 0.16;
+}
+
+.medical-card img {
+  width: 75px;
+  height: 75px;
+  object-fit: contain;
+  margin-bottom: 14px;
+}
+
+.medical-number {
+  position: absolute;
+  right: 25px;
+  top: 22px;
+  color: rgba(7, 87, 149, 0.25);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.medical-card h3 {
+  margin: 0 0 12px;
+  color: var(--color-blue-deep);
+  font-family: var(--font-heading);
+  font-size: 25px;
+  font-weight: 500;
+}
+
+.medical-card p,
+.medical-card li {
+  color: #566d7a;
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.medical-card ul {
+  padding-left: 18px;
+}
+
+/* ==================== Environment（診療環境） ==================== */
+.environment {
+  position: relative;
+  padding-block: clamp(96px, 8.5vw, 136px);
+  background: #eef9fd;
+}
+
+.environment::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 36%;
+  height: 7px;
+  background: linear-gradient(90deg, var(--color-blue), #a4e2f6);
+}
+
+.environment-layout {
+  grid-template-columns: 0.85fr 1.15fr;
+}
+
+.mini-features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 25px;
+}
+
+.mini-features span {
+  padding: 8px 14px;
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  color: var(--color-blue-deep);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.photo-collage {
+  position: relative;
+  min-height: 500px;
+}
+
+.photo-collage img {
+  position: absolute;
+  object-fit: cover;
+  box-shadow: var(--shadow-soft);
+  border-radius: var(--radius);
+}
+
+.photo-collage-main {
+  top: 0;
+  right: 0;
+  width: 82%;
+  height: 390px;
+}
+
+.photo-collage-sub {
+  bottom: 0;
+  left: 0;
+  width: 48%;
+  height: 220px;
+  border: 9px solid #eef9fd;
+}
+
+/* ==================== Message（院長メッセージ） ==================== */
+.message {
+  padding-block: clamp(96px, 8.5vw, 136px);
+  background: var(--color-canvas);
+}
+
+.message-layout {
+  grid-template-columns: 0.75fr 1.25fr;
+}
+
+.doctor-photo img {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: var(--radius);
+}
+
+.doctor-sign {
+  margin-top: 22px;
+  text-align: right;
+  color: var(--color-text);
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+.doctor-sign strong {
+  font-family: var(--font-heading);
+  font-size: 21px;
+  font-weight: 500;
+}
+
+/* ==================== Staff（スタッフ紹介） ==================== */
+.staff {
+  padding-block: clamp(96px, 8.5vw, 136px);
+  background: #f4fbfe;
+}
+
+.staff-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 28px;
+  align-items: stretch;
+}
+
+.staff-card {
+  height: 100%;
+  padding: 16px 16px 30px;
+  text-align: left;
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: 0 8px 25px rgba(36, 102, 137, 0.08);
+}
+
+.staff-card img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  object-position: center 22%;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+.staff-card small,
+.staff-card h3,
+.staff-card p {
+  margin-inline: 8px;
+}
+
+.staff-card small {
+  color: var(--color-coral);
+  font-weight: 700;
+}
+
+.staff-card h3 {
+  margin: 5px 0 8px;
+  color: var(--color-blue-deep);
+  font-family: var(--font-heading);
+  font-size: 23px;
+  font-weight: 500;
+}
+
+.staff-card p {
+  margin: 0;
+  color: var(--color-text-light);
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+/* ==================== News（お知らせ・トップページのカード一覧） ==================== */
+.news {
+  position: relative;
+  padding-block: clamp(96px, 8.5vw, 136px);
+  background: #fff;
+}
+
+.news::after {
+  content: "";
+  position: absolute;
+  right: 4%;
+  top: 65px;
+  width: 110px;
+  height: 55px;
+  background-image: radial-gradient(var(--color-blue) 1.5px, transparent 1.5px);
+  background-size: 12px 12px;
+  opacity: 0.2;
+}
+
+.news-heading-row {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  margin-bottom: 35px;
+}
+
+.news-heading-row .section-title,
+.news-heading-row .section-heading {
+  margin: 0;
+  text-align: left;
+}
+
+.news-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.news-card {
+  padding-bottom: 20px;
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  box-shadow: 0 8px 22px rgba(36, 102, 137, 0.06);
+  overflow: hidden;
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.news-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-soft);
+}
+
+.news-card img {
+  width: 100%;
+  height: 230px;
+  object-fit: cover;
+}
+
+.news-card .category {
+  display: inline-block;
+  margin: 18px 20px 7px;
+  padding: 4px 10px;
+  color: var(--color-blue-deep);
+  background: var(--color-blue-soft);
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.news-card .title {
+  margin: 0 20px;
+  color: #314b5a;
+  font-size: 16px;
+  line-height: 1.85;
+}
+
+/* ==================== Access（アクセス） ==================== */
+.access {
+  padding-block: clamp(96px, 8.5vw, 136px);
+  background: linear-gradient(135deg, #eaf8ff, #fff);
+}
+
+.access-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+}
+
+.access-card,
+.schedule-card {
+  padding: 44px;
+  background: rgba(255, 255, 255, 0.93);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+}
+
+.schedule-card {
+  border-top: 5px solid var(--color-coral);
+}
+
+.access-card .section-heading,
+.schedule-card .section-heading {
+  text-align: left;
+}
+
+.access-card .section-title,
+.schedule-card .section-title {
+  text-align: left;
+}
+
+.address {
+  color: var(--color-blue-deep);
+  font-weight: 700;
+  line-height: 1.8;
+}
+
+.access-card > p,
+.schedule-card > p {
+  color: var(--color-text-light);
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.note {
+  padding: 12px;
+  background: var(--color-yellow-soft);
+  border-radius: 8px;
+  border-left: 4px solid #e9b53e;
+}
+
+.map-placeholder {
+  min-height: 190px;
+  margin-top: 22px;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  background:
+    linear-gradient(25deg, transparent 48%, #d7e9ef 49%, transparent 51%),
+    linear-gradient(-32deg, transparent 48%, #dcecf1 49%, transparent 51%),
+    #f3f8f9;
+  background-size: 70px 60px;
+  border-radius: var(--radius);
+  color: var(--color-blue-deep);
+}
+
+.map-placeholder span {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+}
+
+.map-placeholder strong {
+  padding: 8px 20px;
+  background: #fff;
+  border-radius: 999px;
+  box-shadow: var(--shadow-soft);
+}
+
+.schedule-card table {
+  width: 100%;
+  margin: 20px 0;
+  border-collapse: separate;
+  border-spacing: 0;
+  text-align: center;
+  font-size: 12px;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.schedule-card th,
+.schedule-card td {
+  padding: 11px 7px;
+  border-right: 1px solid #d7e5ea;
+  border-bottom: 1px solid #d7e5ea;
+  background: #fff;
+}
+
+.schedule-card th {
+  color: var(--color-blue-deep);
+}
+
+.schedule-card td {
+  color: var(--color-coral);
+  font-weight: 700;
+}
+
+.schedule-card .btn {
+  width: 300px;
+  min-height: 58px;
+  margin-top: 26px;
+  padding: 10px 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: #fff;
+  background: linear-gradient(135deg, #fa8177, var(--color-coral-deep));
+  border: 2px solid rgba(255, 255, 255, 0.75);
+  border-radius: var(--radius);
+  box-shadow: 0 11px 24px rgba(226, 91, 84, 0.25);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+/* ==================== Footer ==================== */
+#footer {
+  padding: 46px 0;
+  color: #fff;
+  background: linear-gradient(135deg, #159bd7, #65c4e7);
+}
+
+.footer-Container {
+  display: grid;
+  grid-template-columns: 270px 1fr auto;
+  align-items: center;
+  gap: 30px;
+}
+
+#footer-Logo img {
+  width: 250px;
+}
+
+.footer-Container .tagline {
+  font-size: 12px;
+}
+
+#footer-Navi .menu {
+  display: flex;
+  gap: 18px;
+  font-size: 11px;
+}
+
+.footer-Container .copyright {
+  grid-column: 1 / -1;
+  text-align: right;
+  opacity: 0.8;
+}
+
+.footer-Container .btn {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* ==================== モバイル用の固定予約ボタン（スマホ表示のみ） ==================== */
+#mobile-reservation {
+  display: none;
+}
+
+/* ==================== サブページ共通（news.html / contact.html） ==================== */
+/* SANBOU側にはニュース一覧ページが無いため、命名パターン（-hero接尾辞）だけを
+   合わせて .news-hero / .contact-hero とページごとに分けている。 */
+.sub-header {
+  height: 96px;
+}
+
+.news-hero,
+.contact-hero {
+  position: relative;
+  padding: 110px 24px;
+  overflow: hidden;
+  text-align: center;
+  background: linear-gradient(135deg, #e9f8ff, #fff7ed);
+}
+
+.news-hero::before,
+.contact-hero::before,
+.news-hero::after,
+.contact-hero::after {
+  content: "";
+  position: absolute;
+  border: 2px dotted var(--color-blue);
+  border-radius: 50%;
+  opacity: 0.22;
+}
+
+.news-hero::before,
+.contact-hero::before {
+  width: 150px;
+  height: 150px;
+  left: 6%;
+  top: -45px;
+}
+
+.news-hero::after,
+.contact-hero::after {
+  width: 95px;
+  height: 95px;
+  right: 9%;
+  bottom: -35px;
+}
+
+.news-hero .label,
+.contact-hero .label {
+  margin: 0;
+  color: var(--color-coral);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+}
+
+.news-hero h1,
+.contact-hero h1 {
+  margin: 7px 0;
+  color: var(--color-blue-deep);
+  font-family: var(--font-heading);
+  font-size: clamp(44px, 4.2vw, 60px);
+  font-weight: 500;
+}
+
+.news-hero .lead,
+.contact-hero .lead {
+  color: var(--color-text-light);
+  font-size: 13px;
+}
+
+/* news.html：お知らせ・コラム一覧 */
+.article-list {
+  padding-block: 110px 130px;
+}
+
+.article {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 68px;
+  padding-block: 70px;
+  border-bottom: 1px dashed #badbe9;
+}
+
+.article-image img {
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
+  border-radius: var(--radius);
+}
+
+.category {
+  display: inline-block;
+  padding: 5px 12px;
+  color: var(--color-blue-deep);
+  background: var(--color-blue-soft);
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.article .title {
+  margin: 12px 0 20px;
+  color: var(--color-blue-deep);
+  font-family: var(--font-heading);
+  font-size: 31px;
+  font-weight: 500;
+  line-height: 1.55;
+}
+
+.article h3 {
+  color: var(--color-blue-deep);
+  font-size: 16px;
+}
+
+.article p,
+.article li {
+  color: var(--color-text-light);
+  font-size: 14px;
+  line-height: 2;
+}
+
+/* contact.html：お問い合わせフォーム */
+.contact-main {
+  padding-block: 0 130px;
+}
+
+.contact-layout {
+  display: grid;
+  grid-template-columns: 0.75fr 1.25fr;
+  gap: 70px;
+  align-items: start;
+}
+
+.contact-intro {
+  align-self: start;
+  padding: 38px;
+  background: var(--color-blue-soft);
+  border-radius: var(--radius);
+  border-top: 5px solid var(--color-blue);
+}
+
+.contact-intro h2 {
+  margin-top: 0;
+  color: var(--color-blue-deep);
+  font-family: var(--font-heading);
+  font-size: 27px;
+  font-weight: 500;
+}
+
+.contact-intro p,
+.contact-intro li {
+  color: var(--color-text-light);
+  font-size: 13px;
+  line-height: 1.9;
+}
+
+.contact-form-area {
+  padding: 52px;
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+}
+
+form {
+  display: block;
+}
+
+.field {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 20px;
+  align-items: start;
+  margin-bottom: 30px;
+}
+
+.field-label {
+  padding-top: 12px;
+  color: var(--color-blue-deep);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.badge {
+  margin-left: 8px;
+  padding: 3px 7px;
+  color: #fff;
+  background: var(--color-coral);
+  border-radius: 5px;
+  font-size: 9px;
+  font-style: normal;
+}
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  padding: 13px 15px;
+  color: var(--color-text);
+  background: #fbfdfe;
+  border: 1px solid #cfe1e9;
+  border-radius: 8px;
+  font: inherit;
+  font-size: 14px;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  outline: 3px solid #b9e8fa;
+  border-color: var(--color-blue);
+}
+
+.divider {
+  border: 0;
+}
+
+.consent-row {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  font-size: 12px;
+  color: var(--color-text-light);
+}
+
+.consent-row input {
+  width: 20px;
+  height: 20px;
+}
+
+.submit {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.submit .btn {
+  width: min(360px, 100%);
+  min-height: 58px;
+  margin: 25px auto 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  color: #fff;
+  background: linear-gradient(135deg, #fb8177, var(--color-coral-deep));
+  border: 0;
+  border-radius: var(--radius);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  box-shadow: 0 10px 25px rgba(226, 91, 84, 0.25);
+}
+
+.submit .note {
+  text-align: center;
+  color: #8b9ba4;
+  font-size: 10px;
+}
+
+/* ==================== レスポンシブ：〜1100px（タブレット横） ==================== */
+@media (max-width: 1100px) {
+  #header .wrap {
+    grid-template-columns: 260px 1fr 205px;
+    gap: 18px;
+  }
+
+  .site-Title-Logo {
+    width: 235px;
+  }
+
+  #header-Navi .menu {
+    gap: 16px;
+  }
+
+  #header-Navi a {
+    font-size: 12px;
+  }
+
+  #header .btn {
+    padding: 0 14px;
+    font-size: 13px;
+  }
+
+  .hero-photo {
+    left: 30%;
+  }
+
+  .medical-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .concept-layout,
+  .environment-layout,
+  .message-layout {
+    gap: 50px;
+  }
+}
+
+/* ==================== レスポンシブ：〜767px（スマホ） ==================== */
+@media (max-width: 767px) {
+  body {
+    padding-bottom: 72px;
+  }
+
+  #header {
+    height: 68px;
+    position: sticky;
+    top: 0;
+    background: rgba(255, 255, 255, 0.97);
+    backdrop-filter: blur(10px);
+  }
+
+  #header .wrap {
+    width: calc(100% - 32px);
+    grid-template-columns: 1fr 48px;
+    gap: 12px;
+  }
+
+  .site-Title-Logo {
+    width: 218px;
+    height: 52px;
+  }
+
+  #header .btn {
+    display: none;
+  }
+
+  #hamburger {
+    width: 48px;
+    height: 48px;
+    padding: 12px 10px;
+    display: grid;
+    align-content: center;
+    gap: 5px;
+    color: var(--color-blue-deep);
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+  #hamburger span {
+    width: 22px;
+    height: 2px;
+    margin: 0 auto;
+    display: block;
+    background: currentColor;
+    border-radius: 999px;
+    transition: transform 180ms ease, opacity 180ms ease;
+  }
+
+  #hamburger[aria-expanded="true"] span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+
+  #hamburger[aria-expanded="true"] span:nth-child(2) {
+    opacity: 0;
+  }
+
+  #hamburger[aria-expanded="true"] span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  #header-Navi {
+    position: absolute;
+    top: 68px;
+    right: 0;
+    left: 0;
+    padding: 10px 20px 20px;
+    background: rgba(255, 255, 255, 0.98);
+    border-bottom: 1px solid var(--color-border);
+    box-shadow: 0 18px 30px rgba(26, 90, 123, 0.12);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    transition: opacity 180ms ease, transform 180ms ease, visibility 180ms ease;
+  }
+
+  #header-Navi.open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  #header-Navi .menu {
+    flex-direction: column;
+    gap: 0;
+    width: 100%;
+    text-align: center;
+  }
+
+  #header-Navi a {
+    min-height: 48px;
+    padding: 14px 4px;
+    border-bottom: 1px dashed var(--color-border);
+    font-size: 14px;
+  }
+
+  #header-Navi a::after {
+    display: none;
+  }
+
+  .hero {
+    min-height: 665px;
+  }
+
+  .hero-photo {
+    inset: 0;
+    left: 0;
+    height: 275px;
+    background-position: 60% 55%;
+  }
+
+  .hero-photo::after {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 253, 249, 0.18) 62%, #fffdf9 100%);
+  }
+
+  .hero-wash {
+    background: linear-gradient(180deg, transparent 0 205px, rgba(255, 253, 249, 0.84) 262px, #fffdf9 350px);
+  }
+
+  .paper-texture {
+    opacity: 0.28;
+    mask-image: linear-gradient(180deg, transparent 0 210px, #000 330px, #000 100%);
+  }
+
+  .hero-inner {
+    width: calc(100% - 40px);
+    min-height: 615px;
+    align-items: flex-start;
+  }
+
+  .hero-copy {
+    width: 100%;
+    padding: 278px 0 80px;
+    text-align: center;
+  }
+
+  .hero-kicker {
+    margin-bottom: 5px;
+    font-size: 17px;
+    letter-spacing: 0.035em;
+  }
+
+  .hero-title {
+    line-height: 1.12;
+  }
+
+  .hero-title span {
+    font-size: 38px;
+  }
+
+  .hero-title strong {
+    margin-top: 4px;
+    font-size: 58px;
+  }
+
+  .hero-description {
+    margin: 15px 0 20px;
+    font-size: 14px;
+    line-height: 1.8;
+  }
+
+  .hero .btn {
+    width: min(330px, 100%);
+    min-height: 60px;
+    margin: 0 auto;
+    padding: 8px 16px;
+    grid-template-columns: 34px 1fr 20px;
+    gap: 8px;
+    font-size: 13px;
+  }
+
+  .hero .btn .btn-icon {
+    width: 34px;
+    height: 34px;
+    font-size: 17px;
+  }
+
+  .hero-badge {
+    right: 12px;
+    top: 178px;
+    bottom: auto;
+    width: 112px;
+    height: 112px;
+    gap: 0;
+    font-size: 9px;
+    line-height: 1.35;
+  }
+
+  .hero-badge img {
+    width: 43px;
+  }
+
+  .decor-leaf {
+    top: 260px;
+    right: -22px;
+    width: 78px;
+    opacity: 0.75;
+  }
+
+  .decor-sparkle {
+    top: 305px;
+    left: -2px;
+    width: 46px;
+  }
+
+  .decor-brush {
+    display: none;
+  }
+
+  .hero-wave {
+    height: 60px;
+  }
+
+  .trust {
+    min-height: 360px;
+    padding: 4px 20px 0;
+  }
+
+  .trust .section-heading {
+    font-size: 23px;
+    line-height: 1.55;
+  }
+
+  .trust .section-lead {
+    margin: 10px auto 18px;
+    max-width: 335px;
+    font-size: 12px;
+    line-height: 1.75;
+  }
+
+  .trust .section-lead br {
+    display: none;
+  }
+
+  .trust-list {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding: 0 4px 16px;
+    scrollbar-width: none;
+  }
+
+  .trust-list::-webkit-scrollbar {
+    display: none;
+  }
+
+  .trust-card {
+    flex: 0 0 245px;
+    min-height: 154px;
+    padding: 18px;
+    grid-template-columns: 72px 1fr;
+    border-radius: var(--radius);
+    scroll-snap-align: center;
+  }
+
+  .trust-card img {
+    width: 64px;
+    max-height: 70px;
+  }
+
+  .trust-card h3 {
+    font-size: 15px;
+  }
+
+  #mobile-reservation {
+    position: fixed;
+    z-index: 30;
+    right: 12px;
+    bottom: 10px;
+    left: 12px;
+    min-height: 58px;
+    padding: 7px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    color: #fff;
+    background: linear-gradient(135deg, #fb8177, var(--color-coral-deep));
+    border: 2px solid rgba(255, 255, 255, 0.86);
+    border-radius: var(--radius);
+    box-shadow: 0 9px 24px rgba(226, 91, 84, 0.32);
+    font-size: 14px;
+    font-weight: 700;
+    text-align: left;
+  }
+
+  #mobile-reservation .btn-icon {
+    font-size: 22px;
+  }
+
+  #mobile-reservation small {
+    display: block;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+  }
+
+  .concept,
+  .medical,
+  .environment,
+  .message,
+  .staff,
+  .news,
+  .access {
+    padding-block: 76px;
+  }
+
+  .wrap {
+    width: calc(100% - 40px);
+  }
+
+  .section-heading {
+    font-size: 30px;
+    margin-bottom: 22px;
+    line-height: 1.5;
+  }
+
+  .section-lead {
+    font-size: 14px;
+    line-height: 2;
+  }
+
+  .concept-layout,
+  .environment-layout,
+  .message-layout {
+    grid-template-columns: 1fr;
+    gap: 46px;
+  }
+
+  .concept-layout .section-lead,
+  .environment-layout .section-lead,
+  .message-layout .section-lead {
+    max-width: none;
+  }
+
+  .organic-photo img {
+    height: 280px;
+  }
+
+  .medical-list {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .medical-card {
+    min-height: 0;
+    padding: 24px;
+  }
+
+  .medical-card img {
+    width: 60px;
+    height: 60px;
+  }
+
+  .environment-layout .section-copy {
+    order: 2;
+  }
+
+  .photo-collage {
+    min-height: 360px;
+  }
+
+  .photo-collage-main {
+    width: 90%;
+    height: 290px;
+  }
+
+  .photo-collage-sub {
+    width: 52%;
+    height: 155px;
+  }
+
+  .doctor-photo {
+    max-width: 300px;
+    margin: auto;
+  }
+
+  .message-layout .section-copy {
+    text-align: left;
+  }
+
+  .staff-list {
+    grid-template-columns: 1fr;
+  }
+
+  .staff-card {
+    max-width: none;
+    padding: 14px 14px 26px;
+  }
+
+  .staff-card img {
+    height: auto;
+    aspect-ratio: 4 / 3;
+  }
+
+  .news-heading-row {
+    align-items: start;
+    gap: 20px;
+  }
+
+  .news-heading-row .btn {
+    white-space: nowrap;
+  }
+
+  .news-list {
+    grid-template-columns: 1fr;
+  }
+
+  .news-card img {
+    height: 190px;
+  }
+
+  .access-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .access-card,
+  .schedule-card {
+    padding: 25px 18px;
+  }
+
+  .schedule-card {
+    overflow-x: auto;
+  }
+
+  .schedule-card table {
+    min-width: 540px;
+  }
+
+  .schedule-card .btn {
+    width: 100%;
+  }
+
+  .footer-Container {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  #footer-Logo img {
+    margin: auto;
+  }
+
+  #footer-Navi .menu {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .footer-Container .copyright {
+    grid-column: auto;
+    text-align: center;
+  }
+
+  .news-hero,
+  .contact-hero {
+    padding: 76px 20px;
+  }
+
+  .news-hero h1,
+  .contact-hero h1 {
+    font-size: 36px;
+  }
+
+  .article-list {
+    padding-block: 46px 85px;
+  }
+
+  .article {
+    grid-template-columns: 1fr;
+    gap: 28px;
+    padding-block: 48px;
+  }
+
+  .article-image img {
+    height: 210px;
+  }
+
+  .article .title {
+    font-size: 25px;
+  }
+
+  .contact-main {
+    padding-block: 0 90px;
+  }
+
+  .contact-layout {
+    grid-template-columns: 1fr;
+    gap: 34px;
+  }
+
+  .contact-intro {
+    padding: 27px 23px;
+  }
+
+  .contact-form-area {
+    padding: 30px 20px;
+  }
+
+  .field {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .field-label {
+    padding-top: 0;
+  }
+
+  .consent-row {
+    text-align: left;
+  }
+
+  .sub-header #header-Navi {
+    display: grid;
+  }
+}
+
+/* ==================== アニメーションを減らす設定のユーザーへの配慮 ==================== */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
